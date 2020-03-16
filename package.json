@@ -1,0 +1,26 @@
+{
+  "name": "mw-backend",
+  "version": "1.0.0",
+  "description": "The backend for the therapist banner site",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "multer": "^1.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Danny-Rosenberg/mw-backend.git"
+  },
+  "author": "Danny",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Danny-Rosenberg/mw-backend/issues"
+  },
+  "homepage": "https://github.com/Danny-Rosenberg/mw-backend#readme"
+}
