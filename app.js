@@ -19,7 +19,11 @@ app.get('/', function (req, res) {
 
 app.post('/contact',
 	[
-		body('email', 'email is invalid').isEmail()
+		body('email', 'email is invalid').isEmail().normalizeEmail(),
+		body('firstName', 'first name must be text').trim().isAlpha(),
+		body('lastName', 'first name must be text').trim().isAlpha(),
+		body('age', 'must be a valid age').isInt({ min: 1, max: 120, allow_leading_zeroes: false }),
+		body('phoneNumber').isMobilePhone()
 	],
 	function(req, res) {
 		const errors = validationResult(req);
@@ -27,7 +31,7 @@ app.post('/contact',
 			return res.status(422).json({ errors: errors.array() });
 		}
 		console.log("got a post request to /contact");
-		res.send('hello contact ' + req.body.fullName)
+		res.send('hello contact ' + req.body.firstName)
 })
 
 
