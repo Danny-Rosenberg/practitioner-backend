@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 const { body, check, validationResult } = require('express-validator');
+var contactService = require('./services/contactService');
 
 
 // enable CORS
@@ -31,7 +32,8 @@ app.post('/contact',
 			return res.status(422).json({ errors: errors.array() });
 		}
 		console.log("got a post request to /contact");
-		res.send('hello contact ' + req.body.firstName)
+		response = contactService.save(req.body);
+		res.send(response);
 })
 
 
