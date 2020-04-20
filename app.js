@@ -1,8 +1,15 @@
-var express = require('express');
+const express = require('express');
 var app = express();
 const { body, check, validationResult } = require('express-validator');
-var contactService = require('./services/contactService');
+const contactService = require('./src/services/contactService');
+var db = require('./src/models/index');
 
+//setup db
+db.connectDb().then(async () => {
+	app.listen(process.env.PORT, () =>
+		console.log("Practioner app listening on port ${process.env.PORT}"),
+	);
+});
 
 // enable CORS
 app.use(function(req, res, next) {
@@ -32,7 +39,7 @@ app.post('/contact',
 			return res.status(422).json({ errors: errors.array() });
 		}
 		console.log("got a post request to /contact");
-		response = contactService.save(req.body);
+		response = contactService.saveContact(req.body);
 		res.send(response);
 })
 
