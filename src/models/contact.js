@@ -10,7 +10,7 @@ const contactSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
-contactSchema.statics.findByEmail = async function (email) {
+contactSchema.statics.findByEmail = async function(email) {
 	let contact = await this.findOne({
 		email: email
 	});
@@ -19,8 +19,8 @@ contactSchema.statics.findByEmail = async function (email) {
 };
 
 
-contactSchema.statics.findUnackedContacts = async function() {
-	let contacts = Contact.where('ackStatus').equals(null)
+contactSchema.statics.getUnackedContacts = async function(callback) {
+	let contacts = await this.find({ ackStatus: false }, callback);
 	return contacts;
 };
 

@@ -1,15 +1,43 @@
 const express = require('express');
 var app = express();
+
+//load .env values into process.env
+require('dotenv').config()
+
+
 const { body, check, validationResult } = require('express-validator');
 const contactService = require('./src/services/contactService');
 var db = require('./src/models/index');
+var models = require('./src/models');
 
+const eraseDatabaseOnSync = true
 //setup db
 db.connectDb().then(async () => {
-	app.listen(process.env.PORT, () =>
-		console.log("Practioner app listening on port ${process.env.PORT}"),
+	if(eraseDatabaseOnSync) {
+		await Promise.all([
+			models.Models.Contact.Contact.deleteMany({})
+		]);
+	}
+	seedDb();
+	app.listen(process.env.DB_PORT, () =>
+		console.log("Practioner app listening on port: " + process.env.DB_PORT),
 	);
 });
+
+
+const seedDb = async () => {
+	contact = new models.Models.Contact.Contact({
+		firstName: 'honus',
+		lastName: 'wagner',
+		phoneNumber: '123-456-7890',
+		email: 'dutch@aol.com',
+		note: 'I need a good speech therapist',
+		ackStatus: false
+	});
+
+	await contact.save();
+
+};
 
 // enable CORS
 app.use(function(req, res, next) {
@@ -20,8 +48,9 @@ app.use(function(req, res, next) {
 app.use(express.json());
 
 
-app.get('/', function (req, res) {
-   res.send('Hello World');
+app.get('/admin/contact', function(req, res) {
+	var response = contactService.list();
+	res.send(response);
 })
 
 
@@ -39,7 +68,7 @@ app.post('/contact',
 			return res.status(422).json({ errors: errors.array() });
 		}
 		console.log("got a post request to /contact");
-		response = contactService.saveContact(req.body);
+		var response = contactService.create(req.body);
 		res.send(response);
 })
 

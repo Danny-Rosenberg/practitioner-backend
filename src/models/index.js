@@ -3,9 +3,9 @@ var mongoose = require('mongoose');
 var Contact = require('./contact.js');
 
 exports.connectDb = () => {
-	console.log('env is: ' + process.env);
-	return mongoose.connect('mongodb://localhost:27017/practicioner');
+	console.log('env db URL is: ' + process.env.DATABASE_URL);
+	return mongoose.connect(process.env.DATABASE_URL);
 };
 
-exports.Contact = { Contact };
 
+exports.Models = { Contact };
