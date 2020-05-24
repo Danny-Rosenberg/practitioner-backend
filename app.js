@@ -1,14 +1,43 @@
 const express = require('express');
 var app = express();
 
+
+//authentication dependencies
+app.use(express.static(__dirname));
+
+const bodyParser = require('body-parser');
+const expressSession = require('express-session')({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false
+});
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(expressSession);
+const passport = require('passport');
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+//setup routes
+var routes = require('./src/routes/index');
+
 //load .env values into process.env
 require('dotenv').config()
 
 
-const { body, check, validationResult } = require('express-validator');
-const contactService = require('./src/services/contactService');
 var db = require('./src/models/index');
 var models = require('./src/models');
+
+
+/* PASSPORT LOCAL AUTHENTICATION */
+
+passport.use(models.Models.Account.Account.createStrategy());
+
+passport.serializeUser(models.Models.Account.Account.serializeUser());
+passport.deserializeUser(models.Models.Account.Account.deserializeUser());
+
 
 const eraseDatabaseOnSync = true
 //setup db
@@ -39,6 +68,11 @@ const seedDb = async () => {
 
 };
 
+
+//setup routes
+app.use('/', routes);
+
+
 // enable CORS
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -48,32 +82,8 @@ app.use(function(req, res, next) {
 app.use(express.json());
 
 
-app.get('/admin/contact', function(req, res) {
-	var response = contactService.list();
-	res.send(response);
-})
-
-
-app.post('/contact',
-	[
-		body('email', 'email is invalid').isEmail().normalizeEmail(),
-		body('firstName', 'first name must be text').trim().isAlpha(),
-		body('lastName', 'first name must be text').trim().isAlpha(),
-		body('age', 'must be a valid age').isInt({ min: 1, max: 120, allow_leading_zeroes: false }),
-		body('phoneNumber').isMobilePhone()
-	],
-	function(req, res) {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(422).json({ errors: errors.array() });
-		}
-		console.log("got a post request to /contact");
-		var response = contactService.create(req.body);
-		res.send(response);
-})
-
-
-var server = app.listen(8000, function () {
+const port = process.env.PORT || 8000;
+var server = app.listen(port, function () {
    var host = server.address().address
    var port = server.address().port
    
