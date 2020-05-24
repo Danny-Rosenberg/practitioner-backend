@@ -2,9 +2,6 @@ const express = require('express');
 var app = express();
 
 
-//authentication dependencies
-app.use(express.static(__dirname));
-
 const bodyParser = require('body-parser');
 const expressSession = require('express-session')({
   secret: 'secret',
@@ -38,13 +35,13 @@ passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
 
-const eraseDatabaseOnSync = true
 //setup db
 connectDb().then(async () => {
-	if(eraseDatabaseOnSync) {
+	//TODO add error handling this fails quietly
+	if(process.env.ERASE_DB_ON_SYNC) {
 		await Promise.all([
-			Contact.Contact.deleteMany({}),
-			Account.Account.deleteMany({})
+			Contact.deleteMany({}),
+			Account.deleteMany({})
 		]);
 	}
 	seedDb();
@@ -55,7 +52,7 @@ connectDb().then(async () => {
 
 
 const seedDb = async () => {
-	contact = new Contact.Contact({
+	contact = new Contact({
 		firstName: 'honus',
 		lastName: 'wagner',
 		phoneNumber: '123-456-7890',
@@ -63,6 +60,11 @@ const seedDb = async () => {
 		note: 'I need a good speech therapist',
 		ackStatus: false
 	});
+
+
+	/* REGISTER SOME ACCOUNTS */
+	Account.register({username:'peach', active: false}, 'peach');
+	Account.register({username:'jiggly', active: false}, 'jiggly');
 
 	await contact.save();
 

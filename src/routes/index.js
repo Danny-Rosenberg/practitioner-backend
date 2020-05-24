@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var passport = require('passport');
 
 const { body, check, validationResult } = require('express-validator');
 const contactService = require('../services/contactService');

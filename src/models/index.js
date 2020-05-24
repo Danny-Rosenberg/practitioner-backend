@@ -4,7 +4,7 @@ var Account = require('./account.js');
 
 var connectDb = () => {
 	console.log('env db URL is: ' + process.env.DATABASE_URL);
-	return mongoose.connect(process.env.DATABASE_URL);
+	return mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 };
 
 
