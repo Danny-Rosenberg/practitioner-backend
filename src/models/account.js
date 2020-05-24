@@ -9,4 +9,4 @@ const accountSchema = new mongoose.Schema({
 
 accountSchema.plugin(passportLocalMongoose);
 
-exports.Account = mongoose.model('Account', accountSchema);
+module.exports = mongoose.model('Account', accountSchema);

@@ -28,15 +28,15 @@ require('dotenv').config()
 
 
 var db = require('./src/models/index');
-var models = require('./src/models');
+const { Account, Contact } = require('./src/models');
 
 
 /* PASSPORT LOCAL AUTHENTICATION */
 
-passport.use(models.Models.Account.Account.createStrategy());
+passport.use(Account.createStrategy());
 
-passport.serializeUser(models.Models.Account.Account.serializeUser());
-passport.deserializeUser(models.Models.Account.Account.deserializeUser());
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
 
 const eraseDatabaseOnSync = true
@@ -44,7 +44,8 @@ const eraseDatabaseOnSync = true
 db.connectDb().then(async () => {
 	if(eraseDatabaseOnSync) {
 		await Promise.all([
-			models.Models.Contact.Contact.deleteMany({})
+			Contact.Contact.deleteMany({}),
+			Account.Account.deleteMany({})
 		]);
 	}
 	seedDb();
@@ -55,7 +56,7 @@ db.connectDb().then(async () => {
 
 
 const seedDb = async () => {
-	contact = new models.Models.Contact.Contact({
+	contact = new Contact.Contact({
 		firstName: 'honus',
 		lastName: 'wagner',
 		phoneNumber: '123-456-7890',
@@ -84,8 +85,8 @@ app.use(express.json());
 
 const port = process.env.PORT || 8000;
 var server = app.listen(port, function () {
-   var host = server.address().address
-   var port = server.address().port
+  var host = server.address().address
+  var port = server.address().port
    
    console.log("Example app listening at http://%s:%s", host, port)
 })

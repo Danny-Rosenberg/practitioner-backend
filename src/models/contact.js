@@ -25,4 +25,4 @@ contactSchema.statics.getUnackedContacts = async function(callback) {
 };
 
 
-exports.Contact = mongoose.model('Contact', contactSchema);
+module.exports = mongoose.model('Contact', contactSchema);
