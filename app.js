@@ -27,8 +27,7 @@ var routes = require('./src/routes/index');
 require('dotenv').config()
 
 
-var db = require('./src/models/index');
-const { Account, Contact } = require('./src/models');
+const { Account, Contact, connectDb } = require('./src/models');
 
 
 /* PASSPORT LOCAL AUTHENTICATION */
@@ -41,7 +40,7 @@ passport.deserializeUser(Account.deserializeUser());
 
 const eraseDatabaseOnSync = true
 //setup db
-db.connectDb().then(async () => {
+connectDb().then(async () => {
 	if(eraseDatabaseOnSync) {
 		await Promise.all([
 			Contact.Contact.deleteMany({}),

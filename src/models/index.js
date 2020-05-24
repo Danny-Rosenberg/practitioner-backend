@@ -8,4 +8,4 @@ var connectDb = () => {
 };
 
 
-module.exports = { Account, Contact, connectDb};
+module.exports = { Account, Contact, connectDb };
