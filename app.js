@@ -24,7 +24,7 @@ var routes = require('./src/routes/index');
 require('dotenv').config()
 
 
-const { Account, Contact, connectDb } = require('./src/models');
+const { Contact, User, Account, connectDb } = require('./src/models');
 
 
 /* PASSPORT LOCAL AUTHENTICATION */
@@ -41,6 +41,7 @@ connectDb().then(async () => {
 	if(process.env.ERASE_DB_ON_SYNC) {
 		await Promise.all([
 			Contact.deleteMany({}),
+			User.deleteMany({}), //will this also delete accounts?
 			Account.deleteMany({})
 		]);
 	}
@@ -59,15 +60,23 @@ const seedDb = async () => {
 		email: 'dutch@aol.com',
 		note: 'I need a good speech therapist',
 		ackStatus: false
-	});
+	});	
 
 
 	/* REGISTER SOME ACCOUNTS */
-	Account.register({username:'peach', active: false}, 'peach');
-	Account.register({username:'jiggly', active: false}, 'jiggly');
+	var peach = Account.register({username:'peach', active: false}, 'peach');
+	var jiggly = Account.register({username:'jiggly', active: false}, 'jiggly');
+
+	user = new User({
+		firstName: 'star',
+		lastName: 'burns',
+		phoneNumber: '123-456-7890',
+		age: 45,
+		account: peach
+	});
 
 	await contact.save();
-
+	await user.save();
 };
 
 

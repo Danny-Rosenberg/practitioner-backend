@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
+
 var Contact = require('./contact.js');
-var Account = require('./account.js');
+
+const { User, Account }	= require('./user.js');
 
 var connectDb = () => {
 	console.log('env db URL is: ' + process.env.DATABASE_URL);
@@ -8,4 +10,4 @@ var connectDb = () => {
 };
 
 
-module.exports = { Account, Contact, connectDb };
+module.exports = { User, Account, Contact, connectDb };

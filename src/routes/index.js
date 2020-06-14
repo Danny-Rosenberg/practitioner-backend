@@ -2,9 +2,12 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
-const { body, check, validationResult } = require('express-validator');
-const contactService = require('../services/contactService');
+const { body, check, checkSchema, validationResult } = require('express-validator');
 const connectEnsureLogin = require('connect-ensure-login');
+
+const contactService 			= require('../services/contactService');
+const registrationService = require('../services/registrationService');
+
 
 router.post('/login', (req, res, next) => {
   passport.authenticate('local',
@@ -29,6 +32,40 @@ router.post('/login', (req, res, next) => {
 });
 
 
+var specialitySchema = {
+  "speciality": {
+    in: 'body',
+    isIn: {
+      options: [["psychology", "speech", "reading"]],
+      errorMessage: "Invalid speciality"
+    }
+  }
+}
+
+
+router.post('/practicioner',
+	[
+	body('email', 'email is invalid').isEmail().normalizeEmail(),
+	body('firstName', 'first name must be text').trim().isAlpha(),
+	body('lastName', 'first name must be text').trim().isAlpha(),
+	body('phoneNumber').isMobilePhone(),
+	checkSchema(specialitySchema),
+	body('yearsExperience').isInt({ min: 0, max: 100, allow_leading_zeroes: false }) //not sure this will allow '0'
+	],
+
+	function(req, res) {
+		console.log("got a post request to /admin");
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+    console.log("got a post request to /admin");
+   // var response = registrationService.createPracticioner(req.body);
+    res.send(response);
+	}
+)
+
+
 router.get('/admin',
   connectEnsureLogin.ensureLoggedIn(),
 	function(req, res) {
@@ -38,6 +75,7 @@ router.get('/admin',
 
 
 router.get('/admin/contact', function(req, res) {
+	//TODO pass in the admin's id, so only their contact requests are delivered
   var response = contactService.list();
   res.send(response);
 })
