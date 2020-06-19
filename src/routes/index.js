@@ -17,7 +17,7 @@ router.post('/login', (req, res, next) => {
     }
 
     if (!user) {
-      return res.redirect('/login?info=' + info);
+      return res.send("no user found");
     }
 
     req.logIn(user, function(err) {
@@ -25,7 +25,7 @@ router.post('/login', (req, res, next) => {
         return next(err);
       }
 
-      return res.redirect('/');
+      return res.send("user successfully logged in!");
     });
 
   })(req, res, next);
@@ -42,7 +42,8 @@ var specialitySchema = {
   }
 }
 
-
+//TODO nice to alias this as 'register' somewhere
+//TODO nice to encapsulate validation for separate models
 router.post('/practicioner',
 	[
 	body('email', 'email is invalid').isEmail().normalizeEmail(),
@@ -74,7 +75,9 @@ router.get('/admin',
 )
 
 
-router.get('/admin/contact', function(req, res) {
+router.get('/admin/contact',
+	connectEnsureLogin.ensureLoggedIn(),
+	function(req, res) {
 	//TODO pass in the admin's id, so only their contact requests are delivered
   var response = contactService.list();
   res.send(response);

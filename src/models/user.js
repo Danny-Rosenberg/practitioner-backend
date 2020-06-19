@@ -3,11 +3,11 @@ var mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const accountSchema = new mongoose.Schema({
-  username: String,
+  email: String,
   password: String
 },  { timestamps: true });
 
-accountSchema.plugin(passportLocalMongoose);
+accountSchema.plugin(passportLocalMongoose, { usernameField : 'email' });
 
 
 const userSchema = new mongoose.Schema({
@@ -19,8 +19,8 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
-module.exports = 
+module.exports =
 	{
-		Account: mongoose.model('Account', accountSchema),	
+		Account: mongoose.model('Account', accountSchema),
 		User: 	 module.exports = mongoose.model('User', userSchema)
-  } 	
+  }

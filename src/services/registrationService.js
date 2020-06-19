@@ -8,6 +8,7 @@ exports.createPracticioner = (body) => {
 		firstName:			 body.firstName,
 		lastName:				 body.lastName,
 		email:					 body.email,
+		password:				 body.password,
 		phoneNumber:		 body.phoneNumber,
 		speciality:			 body.specialty,
 		yearsExperience: body.yearsExperience

@@ -60,12 +60,12 @@ const seedDb = async () => {
 		email: 'dutch@aol.com',
 		note: 'I need a good speech therapist',
 		ackStatus: false
-	});	
+	});
 
 
 	/* REGISTER SOME ACCOUNTS */
-	var peach = Account.register({username:'peach', active: false}, 'peach');
-	var jiggly = Account.register({username:'jiggly', active: false}, 'jiggly');
+	var peach = Account.register({email:'peach@aol.com', active: false}, 'peach');
+	var jiggly = Account.register({email:'jiggly@aol.com', active: false}, 'jiggly');
 
 	user = new User({
 		firstName: 'star',
@@ -80,10 +80,6 @@ const seedDb = async () => {
 };
 
 
-//setup routes
-app.use('/', routes);
-
-
 // enable CORS
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -92,6 +88,8 @@ app.use(function(req, res, next) {
 });
 app.use(express.json());
 
+//setup routes
+app.use('/', routes);
 
 const port = process.env.PORT || 8000;
 var server = app.listen(port, function () {
