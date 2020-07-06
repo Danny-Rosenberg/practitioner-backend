@@ -88,6 +88,15 @@ app.use(function(req, res, next) {
 });
 app.use(express.json());
 
+
+function authChecker(req, res, next){
+	if(req.user){
+		res.loggedIn == true;
+	}
+	next();
+}
+
+
 //setup routes
 app.use('/', routes);
 

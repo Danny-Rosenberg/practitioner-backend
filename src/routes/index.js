@@ -17,7 +17,7 @@ router.post('/login', (req, res, next) => {
     }
 
     if (!user) {
-      return res.send("no user found");
+      return res.status(401).end();
     }
 
     req.logIn(user, function(err) {
@@ -29,6 +29,14 @@ router.post('/login', (req, res, next) => {
     });
 
   })(req, res, next);
+});
+
+
+router.get('/logout',
+	connectEnsureLogin.ensureLoggedIn(),
+	(req, res, next) => {
+	req.logout();
+	console.log('successfully logged out');
 });
 
 
