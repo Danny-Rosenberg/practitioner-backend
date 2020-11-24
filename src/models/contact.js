@@ -6,6 +6,7 @@ const contactSchema = new mongoose.Schema({
 	phoneNumber: { type: String, trim: true, required: true, maxlength: 15 },
 	email: { type: String, trim: true, required: true, maxlength: 30, unique: true },
 	note: { type: String, trim: true, default: '' },
+	practitioner: { type: mongoose.Schema.Types.ObjectId },
 	ackStatus: { type: Boolean, default: null }
 }, { timestamps: true });
 

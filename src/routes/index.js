@@ -33,10 +33,11 @@ router.post('/login', (req, res, next) => {
 
 
 router.get('/logout',
-	connectEnsureLogin.ensureLoggedIn(),
+	connectEnsureLogin.ensureLoggedIn("http://localhost:3000"),
 	(req, res, next) => {
 	req.logout();
 	console.log('successfully logged out');
+	res.sendStatus(200)
 });
 
 
@@ -51,8 +52,7 @@ var specialitySchema = {
 }
 
 //TODO nice to alias this as 'register' somewhere
-//TODO nice to encapsulate validation for separate models
-router.post('/practicioner',
+router.post('/practitioner',
 	[
 	body('email', 'email is invalid').isEmail().normalizeEmail(),
 	body('firstName', 'first name must be text').trim().isAlpha(),
@@ -63,14 +63,14 @@ router.post('/practicioner',
 	],
 
 	function(req, res) {
-		console.log("got a post request to /admin");
+		console.log("got a post request to /practitioner");
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
-    console.log("got a post request to /admin");
+    console.log("got a post request to /practitioner");
    // var response = registrationService.createPracticioner(req.body);
-    res.send(response);
+    res.sendStatus(200);
 	}
 )
 
@@ -84,7 +84,6 @@ router.get('/admin',
 
 
 router.get('/admin/contact',
-	connectEnsureLogin.ensureLoggedIn(),
 	function(req, res) {
 	//TODO pass in the admin's id, so only their contact requests are delivered
   var response = contactService.list();

@@ -21,7 +21,9 @@ app.use(passport.session());
 var routes = require('./src/routes/index');
 
 //load .env values into process.env
-require('dotenv').config()
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 
 const { Contact, User, Account, connectDb } = require('./src/models');
@@ -97,6 +99,9 @@ function authChecker(req, res, next){
 }
 
 
+app.use(authChecker);
+
+
 //setup routes
 app.use('/', routes);
 
@@ -105,5 +110,6 @@ var server = app.listen(port, function () {
   var host = server.address().address
   var port = server.address().port
    
-   console.log("Example app listening at http://%s:%s", host, port)
+	console.log("Example app listening at http://%s:%s", host, port)
+	console.log("client host: " + process.env.CLIENT_HOST)
 })
