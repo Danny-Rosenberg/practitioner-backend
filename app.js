@@ -64,6 +64,15 @@ const seedDb = async () => {
 		ackStatus: false
 	});
 
+	contact_2 = new Contact({
+		firstName: 'mister',
+		lastName: 'snrub',
+		phoneNumber: '999-456-7890',
+		email: 'powerplant@hotmal.com',
+		note: 'I like how Mr. Snrub thinks!',
+		ackStatus: false
+	});
+
 
 	/* REGISTER SOME ACCOUNTS */
 	var peach = Account.register({email:'peach@aol.com', active: false}, 'peach');
@@ -78,7 +87,10 @@ const seedDb = async () => {
 	});
 
 	await contact.save();
+	await contact_2.save();
 	await user.save();
+
+
 };
 
 
