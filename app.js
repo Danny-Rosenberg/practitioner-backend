@@ -89,8 +89,6 @@ const seedDb = async () => {
 	await contact.save();
 	await contact_2.save();
 	await user.save();
-
-
 };
 
 
