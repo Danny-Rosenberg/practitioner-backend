@@ -3,10 +3,16 @@ var router = express.Router();
 var passport = require('passport');
 
 const { body, check, checkSchema, validationResult } = require('express-validator');
-const connectEnsureLogin = require('connect-ensure-login');
+const ensureLoggedIn = require('../middleware/ensureLoggedIn');
 
 const contactService 			= require('../services/contactService');
 const registrationService = require('../services/registrationService');
+
+
+router.use(function (req, res, next) {
+  console.log('request received to:', req.originalUrl)
+	next()
+})
 
 
 router.post('/login', (req, res, next) => {
@@ -33,11 +39,10 @@ router.post('/login', (req, res, next) => {
 
 
 router.get('/logout',
-	connectEnsureLogin.ensureLoggedIn("http://localhost:3000"),
 	(req, res, next) => {
-	req.logout();
-	console.log('successfully logged out');
-	res.sendStatus(200)
+		req.logout();
+		console.log('successfully logged out');
+		res.sendStatus(200)
 });
 
 
@@ -75,8 +80,16 @@ router.post('/practitioner',
 )
 
 
+router.use('/admin',
+	ensureLoggedIn(),
+	function(req, res, next) {
+		console.log('checking authorization')
+		next()
+})
+
+
 router.get('/admin',
-  connectEnsureLogin.ensureLoggedIn(),
+ // ensureLoggedIn(),
 	function(req, res) {
 		res.send('this is a restricted area');
 	}
@@ -84,10 +97,12 @@ router.get('/admin',
 
 
 router.get('/admin/contact',
+	//ensureLoggedIn(),
 	function(req, res) {
-	//TODO pass in the admin's id, so only their contact requests are delivered
-  var response = contactService.list();
-  res.send(response);
+		//TODO pass in the admin's id, so only their contact requests are delivered
+		console.log('past ensure logged in')
+		var response = contactService.list();
+		res.send(response);
 })
 
 
