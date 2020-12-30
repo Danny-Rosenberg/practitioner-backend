@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
-var Contact = require('./contact.js');
+var Contact = require('./contact');
 
-const { User, Account }	= require('./user.js');
+const { User, Account }	= require('./user');
 
 var connectDb = () => {
 	console.log('env db URL is: ' + process.env.DATABASE_URL);
