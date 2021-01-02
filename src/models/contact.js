@@ -20,9 +20,15 @@ contactSchema.statics.findByEmail = async function(email) {
 };
 
 
-contactSchema.statics.getUnackedContacts = async function(callback) {
-	let contacts = await this.find({ ackStatus: false }, callback);
-	return contacts;
+contactSchema.statics.getUnackedContacts = async function() {
+	try {
+		const contacts = await this.find({ ackStatus: false }).exec();
+		console.log('executed the query');
+		return contacts;
+	} catch (err) {
+		console.log(err);
+		throw err
+	}
 };
 
 

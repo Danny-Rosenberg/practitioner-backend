@@ -80,13 +80,13 @@ router.post('/practitioner',
 )
 
 
-router.use('/admin',
+/* router.use('/admin',
 	ensureLoggedIn(),
 	function(req, res, next) {
 		console.log('checking authorization')
 		next()
 })
-
+*/
 
 router.get('/admin',
  // ensureLoggedIn(),
@@ -96,13 +96,23 @@ router.get('/admin',
 )
 
 
-router.get('/admin/contact',
+router.get('/admin/contacts',
 	//ensureLoggedIn(),
 	function(req, res) {
 		//TODO pass in the admin's id, so only their contact requests are delivered
-		console.log('past ensure logged in')
-		var response = contactService.list();
-		res.send(response);
+		var response = [];
+		var contacts = contactService.list()
+			.then(cs => {
+				cs.forEach(function(c) {
+					response.push({
+						firstName: c.firstName,
+						lastName:  c.lastName,
+						email:     c.email,
+						note:			 c.note
+					});
+				});
+				res.json({ contacts: response });
+			});
 })
 
 

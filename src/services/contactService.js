@@ -1,7 +1,6 @@
 var Contact = require('../../src/models/contact')
 
 exports.create = (body) => {
-	console.log('what is contact?', Contact)
   var contact = new Contact({
 		firstName:	 body.firstName,
 		lastName:		 body.lastName,
@@ -24,12 +23,6 @@ exports.create = (body) => {
 
 
 exports.list = () => {
-	var res = Contact.getUnackedContacts(function (err, contacts) {
-		if(err) {
-			console.log('hit error while finding unacked contacts');
-			return err.message;
-		}
-		return contacts	
-	});
+	var res = Contact.getUnackedContacts();
 	return res;
 }
