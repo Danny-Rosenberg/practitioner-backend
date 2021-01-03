@@ -4,16 +4,14 @@ var passport = require('passport');
 
 const { body, check, checkSchema, validationResult } = require('express-validator');
 const ensureLoggedIn = require('../middleware/ensureLoggedIn');
+const logAllRequests = require('../middleware/logAllRequests');
 
 const contactService 			= require('../services/contactService');
 const registrationService = require('../services/registrationService');
 
-
-router.use(function (req, res, next) {
-  console.log('request received to:', req.originalUrl)
-	next()
-})
-
+// router middleware
+router.use(logAllRequests);
+// router.use('/admin', ensureLoggedIn)
 
 router.post('/login', (req, res, next) => {
   passport.authenticate('local',
@@ -80,14 +78,6 @@ router.post('/practitioner',
 )
 
 
-/* router.use('/admin',
-	ensureLoggedIn(),
-	function(req, res, next) {
-		console.log('checking authorization')
-		next()
-})
-*/
-
 router.get('/admin',
  // ensureLoggedIn(),
 	function(req, res) {
@@ -112,6 +102,9 @@ router.get('/admin/contacts',
 					});
 				});
 				res.json({ contacts: response });
+			})
+		  .catch((err) => {
+				res.sendStatus(500).json({ errors: err.message });
 			});
 })
 
