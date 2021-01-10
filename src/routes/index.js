@@ -72,7 +72,7 @@ router.post('/practitioner',
       return res.status(422).json({ errors: errors.array() });
     }
     console.log("got a post request to /practitioner");
-   // var response = registrationService.createPracticioner(req.body);
+   // var response = registrationService.createPractitioner(req.body);
     res.sendStatus(200);
 	}
 )

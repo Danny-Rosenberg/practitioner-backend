@@ -26,7 +26,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 
-const { Contact, User, Account, connectDb } = require('./src/models');
+const { Contact, User, Account, Practitioner, connectDb } = require('./src/models');
 
 
 /* PASSPORT LOCAL AUTHENTICATION */
@@ -44,24 +44,41 @@ connectDb().then(async () => {
 		await Promise.all([
 			Contact.deleteMany({}),
 			User.deleteMany({}), //will this also delete accounts?
-			Account.deleteMany({})
+			Account.deleteMany({}),
+			Practitioner.deleteMany({})
 		]);
 	}
-	seedDb();
+
+	seedDb()
+	.then()
+	.catch((err) => {
+		console.log('hit an error seeding', err);
+	});
+
 	app.listen(process.env.DB_PORT, () =>
 		console.log("Practioner app listening on port: " + process.env.DB_PORT),
 	);
+})
+.catch((err) => {
+	console.log('hit error on connectDB');
 });
 
 
 const seedDb = async () => {
+	pract1 = new Practitioner({
+		yearsExperience: '3',
+		specialty: 'SPEECH',
+		state: 'CONFIRMED'
+	});
+
 	contact = new Contact({
 		firstName: 'honus',
 		lastName: 'wagner',
 		phoneNumber: '123-456-7890',
 		email: 'dutch@aol.com',
 		note: 'I need a good speech therapist',
-		ackStatus: false
+		ackStatus: false,
+		practitioner: pract1
 	});
 
 	contact_2 = new Contact({
@@ -70,9 +87,9 @@ const seedDb = async () => {
 		phoneNumber: '999-456-7890',
 		email: 'powerplant@hotmal.com',
 		note: 'I like how Mr. Snrub thinks!',
-		ackStatus: false
+		ackStatus: false,
+		practitioner: pract1
 	});
-
 
 	/* REGISTER SOME ACCOUNTS */
 	var peach = Account.register({email:'peach@aol.com', active: false}, 'peach');
@@ -86,6 +103,7 @@ const seedDb = async () => {
 		account: peach
 	});
 
+	await pract1.save();
 	await contact.save();
 	await contact_2.save();
 	await user.save();
@@ -100,10 +118,10 @@ app.use(function(req, res, next) {
 });
 app.use(express.json());
 
-
+// move this to a middleware directory, try with headers
 function authChecker(req, res, next){
 	if(req.user){
-		res.loggedIn == true;
+		res.loggedIn = true;
 	}
 	next();
 }
