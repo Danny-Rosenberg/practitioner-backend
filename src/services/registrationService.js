@@ -1,10 +1,8 @@
-/*
-var db = require('../../src/models/practitioner');
-var Practicioner = db.Practicioner;
+var Practitioner = require('../../src/models/practitioner');
 
 exports.createPractitioner = (body) => {
 
-  var contact = new Practitioner({
+  var practitioner = new Practitioner({
 		firstName:			 body.firstName,
 		lastName:				 body.lastName,
 		email:					 body.email,
@@ -24,4 +22,4 @@ exports.createPractitioner = (body) => {
 		return practitioner;
 	});
 	return res;
-} */
+}

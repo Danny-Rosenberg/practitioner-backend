@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
-const { body, check, checkSchema, validationResult } = require('express-validator');
+const { body, check, validationResult } = require('express-validator');
 const ensureLoggedIn = require('../middleware/ensureLoggedIn');
 const logAllRequests = require('../middleware/logAllRequests');
 
@@ -44,36 +44,24 @@ router.get('/logout',
 });
 
 
-var specialitySchema = {
-  "speciality": {
-    in: 'body',
-    isIn: {
-      options: [["psychology", "speech", "reading"]],
-      errorMessage: "Invalid speciality"
-    }
-  }
-}
-
 //TODO nice to alias this as 'register' somewhere
 router.post('/practitioner',
 	[
-	body('email', 'email is invalid').isEmail().normalizeEmail(),
-	body('firstName', 'first name must be text').trim().isAlpha(),
-	body('lastName', 'first name must be text').trim().isAlpha(),
-	body('phoneNumber').isMobilePhone(),
-	checkSchema(specialitySchema),
-	body('yearsExperience').isInt({ min: 0, max: 100, allow_leading_zeroes: false }) //not sure this will allow '0'
+		body('email', 'email is invalid').isEmail().normalizeEmail(),
+		body('firstName', 'first name must be text').trim().isAlpha(),
+		body('lastName', 'first name must be text').trim().isAlpha(),
+		body('phoneNumber').isMobilePhone(),
+		check('specialty').isIn(['reading', 'behavioral', 'speech']),
+		body('specialty').toUpperCase(),
+		body('yearsExperience').isInt({ min: 0, max: 100, allow_leading_zeroes: false }) //not sure this will allow '0'
 	],
-
 	function(req, res) {
-		console.log("got a post request to /practitioner");
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
-    console.log("got a post request to /practitioner");
-   // var response = registrationService.createPractitioner(req.body);
-    res.sendStatus(200);
+    var response = registrationService.createPractitioner(req.body);
+    res.send(response);
 	}
 )
 
