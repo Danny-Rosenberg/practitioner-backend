@@ -1,6 +1,6 @@
 var Contact = require('../../src/models/contact')
 
-exports.create = (body) => {
+exports.create = async function(body) {
   var contact = new Contact({
 		firstName:	 body.firstName,
 		lastName:		 body.lastName,
@@ -10,23 +10,13 @@ exports.create = (body) => {
 	});
 
 	try {
-
-
-	} catch(err) {
-		console.log('hit error saving practitioner', err);
-		throw err;
-	}
-
-	var res = contact.save(function (err, contact) {
-		if (err) {
-			console.log('hit an error in the contact save');
-			console.log(err.message);
-			return err.message;
-		}
-		console.log('contact saved to db: ' + contact.email);
-		return contact;
-	});
-	return res;
+    let res = await contact.save();
+    console.log('saved contact');
+    return res;
+  } catch(err) {
+    console.log('hit error saving contact: ',  err);
+    throw err;
+  }
 }
 
 

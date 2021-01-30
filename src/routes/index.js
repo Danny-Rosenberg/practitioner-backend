@@ -95,7 +95,7 @@ router.get('/admin/contacts',
 				});
 				res.json({ contacts: response });
 			})
-		  .catch((err) => {
+		  .catch(err => {
 				res.sendStatus(500).json({ errors: err.message });
 			});
 })
@@ -115,8 +115,13 @@ router.post('/contact',
       return res.status(422).json({ errors: errors.array() });
     }
     console.log("got a post request to /contact");
-    var response = contactService.create(req.body);
-    res.send(response);
+    contactService.create(req.body)
+			.then(c => {
+				res.json(c);
+			})
+			.catch(err => {
+				res.sendStatus(500).json({ errors: err.message });
+			});
 })
 
 module.exports = router;
