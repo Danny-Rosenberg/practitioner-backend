@@ -1,6 +1,6 @@
 var Practitioner = require('../../src/models/practitioner');
 
-exports.createPractitioner = (body) => {
+exports.createPractitioner = async function(body) {
 
   var practitioner = new Practitioner({
 		firstName:			 body.firstName,
@@ -12,14 +12,12 @@ exports.createPractitioner = (body) => {
 		yearsExperience: body.yearsExperience
 	});
 
-	var res = practitioner.save(function (err, practitioner) {
-		if (err) {
-			console.log('hit an error in the practitioner save');
-			console.log(err.message);
-			return err.message;
-		}
-		console.log('practitioner saved to db: ' + practitioner.email);
-		return practitioner;
-	});
-	return res;
+	try {
+		let res = await practitioner.save();
+		console.log('saved practitioner');
+		return res;
+  } catch(err) {
+    console.log('hit error saving practitioner: ',  err);
+    throw err;
+  }
 }

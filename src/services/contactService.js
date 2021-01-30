@@ -9,6 +9,14 @@ exports.create = (body) => {
 		age:				 body.age
 	});
 
+	try {
+
+
+	} catch(err) {
+		console.log('hit error saving practitioner', err);
+		throw err;
+	}
+
 	var res = contact.save(function (err, contact) {
 		if (err) {
 			console.log('hit an error in the contact save');

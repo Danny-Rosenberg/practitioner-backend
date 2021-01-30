@@ -60,10 +60,14 @@ router.post('/practitioner',
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
-    var response = registrationService.createPractitioner(req.body);
-    res.send(response);
-	}
-)
+    registrationService.createPractitioner(req.body)
+			.then(p => {
+			  res.json(p);
+			})
+		  .catch(err => {
+				res.sendStatus(500).json({ errors: err.message });
+			});
+})
 
 
 router.get('/admin',
@@ -79,7 +83,7 @@ router.get('/admin/contacts',
 	function(req, res) {
 		//TODO pass in the admin's id, so only their contact requests are delivered
 		var response = [];
-		var contacts = contactService.list()
+		contactService.list()
 			.then(cs => {
 				cs.forEach(function(c) {
 					response.push({
