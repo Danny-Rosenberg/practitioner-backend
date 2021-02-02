@@ -1,7 +1,6 @@
 const express = require('express');
 var app = express();
 
-
 const bodyParser = require('body-parser');
 const expressSession = require('express-session')({
   secret: 'secret',
@@ -27,6 +26,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 const { Contact, User, Account, Practitioner, connectDb } = require('./src/models');
+var seederService = require('./lib/seederService');
 
 
 /* PASSPORT LOCAL AUTHENTICATION */
@@ -36,20 +36,10 @@ passport.use(Account.createStrategy());
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
-
 //setup db
 connectDb().then(async () => {
 	//TODO add error handling this fails quietly
-	if(process.env.ERASE_DB_ON_SYNC) {
-		await Promise.all([
-			Contact.deleteMany({}),
-			User.deleteMany({}), //will this also delete accounts?
-			Account.deleteMany({}),
-			Practitioner.deleteMany({})
-		]);
-	}
-
-	seedDb()
+	seederService.seedDb()
 	.then()
 	.catch((err) => {
 		console.log('hit an error seeding', err);
@@ -60,54 +50,10 @@ connectDb().then(async () => {
 	);
 })
 .catch((err) => {
+	console.log(err);
 	console.log('hit error on connectDB');
 });
 
-
-const seedDb = async () => {
-	pract1 = new Practitioner({
-		yearsExperience: '3',
-		specialty: 'SPEECH',
-		state: 'CONFIRMED'
-	});
-
-	contact = new Contact({
-		firstName: 'honus',
-		lastName: 'wagner',
-		phoneNumber: '123-456-7890',
-		email: 'dutch@aol.com',
-		note: 'I need a good speech therapist',
-		ackStatus: false,
-		practitioner: pract1
-	});
-
-	contact_2 = new Contact({
-		firstName: 'mister',
-		lastName: 'snrub',
-		phoneNumber: '999-456-7890',
-		email: 'powerplant@hotmal.com',
-		note: 'I like how Mr. Snrub thinks!',
-		ackStatus: false,
-		practitioner: pract1
-	});
-
-	/* REGISTER SOME ACCOUNTS */
-	var peach = Account.register({email:'peach@aol.com', active: false}, 'peach');
-	var jiggly = Account.register({email:'jiggly@aol.com', active: false}, 'jiggly');
-
-	user = new User({
-		firstName: 'star',
-		lastName: 'burns',
-		phoneNumber: '123-456-7890',
-		age: 45,
-		account: peach
-	});
-
-	await pract1.save();
-	await contact.save();
-	await contact_2.save();
-	await user.save();
-};
 
 
 // enable CORS
@@ -125,7 +71,6 @@ function authChecker(req, res, next){
 	}
 	next();
 }
-
 
 app.use(authChecker);
 
