@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var Contact = require('./contact');
-var Practitioner = require('./practitioner');
+var { Practitioner, Content } = require('./practitioner');
 
 const { User, Account }	= require('./user');
 
@@ -11,4 +11,4 @@ var connectDb = () => {
 };
 
 
-module.exports = { User, Account, Contact, Practitioner, connectDb };
+module.exports = { User, Account, Contact, Practitioner, Content, connectDb };
