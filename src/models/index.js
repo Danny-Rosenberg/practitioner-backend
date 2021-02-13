@@ -7,7 +7,7 @@ const { User, Account }	= require('./user');
 
 var connectDb = () => {
 	console.log('env db URL is: ' + process.env.DATABASE_URL);
-	return mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
+	return mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 };
 
 
