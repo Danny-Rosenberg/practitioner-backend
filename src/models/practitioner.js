@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 
 const practitionerSchema = new mongoose.Schema({
-  yearsExperience: String,
+  yearsExperience: Number,
   speciality: { type: String, enum: ["BEHAVIORAL", "SPEECH", "READING", null], default: null },
-  state: { type: String, enum: ["REGISTERED", "CONFIRMED"], default: "REGISTERED" }
+  state: { type: String, enum: ["REGISTERED", "CONFIRMED"], default: "REGISTERED" },
 },  { timestamps: true });
 
 practitionerSchema.methods.isConfirmed = function(p) {
