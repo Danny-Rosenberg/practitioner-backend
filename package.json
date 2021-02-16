@@ -20,7 +20,7 @@
     "mocha": "^8.3.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",

@@ -20,8 +20,11 @@ app.use(passport.session());
 var routes = require('./src/routes/index');
 
 //load .env values into process.env
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+if (process.env.ENVIRONMENT !== 'production') {
+	const path = require('path');
+  const dotenv = require('dotenv');
+
+	dotenv.config({ path: path.resolve(__dirname, process.env.ENVIRONMENT + '.env')});
 }
 
 
