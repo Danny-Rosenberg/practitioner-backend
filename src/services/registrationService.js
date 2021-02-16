@@ -1,4 +1,4 @@
-var Practitioner = require('../../src/models/practitioner');
+const { Practitioner } = require('../../src/models/practitioner');
 
 exports.createPractitioner = async function(body) {
 
