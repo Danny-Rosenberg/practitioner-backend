@@ -1,8 +1,9 @@
-var Content = require('../../src/models/practitioner');
+const {Content} = require('../../src/models/practitioner');
 
 exports.createContent = async function(body, practitioner) {
 
   var content = new Content({
+	    practitioner:	practitioner,
 		about:			 body.about,
 		location:		 body.location,
 		home:			 body.home
