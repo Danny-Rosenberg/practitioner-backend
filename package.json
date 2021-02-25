@@ -21,7 +21,7 @@
     "mocha": "^8.3.0"
   },
   "scripts": {
-    "test": "env DATABASE_URL='mongodb://localhost:27017/test_practitioner' mocha"
+    "test": "env DATABASE_URL='mongodb://localhost:27017/test_practitioner' ./node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
