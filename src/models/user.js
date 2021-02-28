@@ -22,5 +22,5 @@ const userSchema = new mongoose.Schema({
 module.exports =
 	{
 		Account: mongoose.model('Account', accountSchema),
-		User: 	 module.exports = mongoose.model('User', userSchema)
+		User: 	 mongoose.model('User', userSchema)
   }

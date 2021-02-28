@@ -1,4 +1,6 @@
-const assert = require('assert');
+const chai = require('chai');
+const assert = chai.assert;
+const expect = chai.expect;
 const registrationService = require('../../src/services/registrationService');
 const mongoose = require('mongoose');
 const factory = require('../factories');
@@ -27,4 +29,33 @@ describe('Practitioner CRUD', () => {
 		});;
 	});
 
+
+	describe('without a speciality specified', () => {
+		it('defaults to null', function(done) {
+			factory.build('Practitioner', {speciality: undefined} ).then(practitionerAttr => {
+				registrationService.createPractitioner(practitionerAttr)
+					.then(practitioner => {
+						assert.equal(practitionerAttr.speciality, null);
+						done();
+					}).catch(err => {
+							done(err);
+				  });
+			})
+		})
+	});
+
+
+	describe('without a state specified', () => {
+		it('defaults to REGISTERED', function(done) {
+			factory.build('Practitioner', {state: undefined}).then(practitionerAttr => {
+				registrationService.createPractitioner(practitionerAttr)
+					.then(practitioner => {
+						assert.equal(practitionerAttr.state, 'REGISTERED');
+						done();
+					}).catch(err => {
+							done(err);
+				  });
+			})
+		})
+	});
 });

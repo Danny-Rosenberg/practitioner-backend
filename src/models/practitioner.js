@@ -20,5 +20,5 @@ const contentSchema = new mongoose.Schema({
 module.exports =
 	{
 		Practitioner: mongoose.model('Practitioner', practitionerSchema),
-		Content: 	  mongoose.model('Content', contentSchema)
+		Content: 	    mongoose.model('Content', contentSchema)
   }

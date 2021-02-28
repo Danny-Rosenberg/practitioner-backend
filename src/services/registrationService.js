@@ -6,6 +6,7 @@ exports.createPractitioner = async function(body) {
 		firstName:			 body.firstName,
 		lastName:				 body.lastName,
 		email:					 body.email,
+		state:					 body.state,
 		password:				 body.password,
 		phoneNumber:		 body.phoneNumber,
 		speciality:			 body.specialty,

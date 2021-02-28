@@ -7,7 +7,6 @@ factory.setAdapter(adapter);
 
 factory.define('Practitioner', Practitioner, (buildOptions) => {
 	const attr = {
-		//id: 						 factory.sequence('Practitioner.id'),
 		yearsExperience: factory.chance('integer', ({ min: 0, max: 80 })),
 		specialty: 			 'READING',
 		state: 					 'REGISTERED'
