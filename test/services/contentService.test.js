@@ -30,18 +30,23 @@ describe('Practitioner CRUD', () => {
 	});
 	
 	it('creates a new content, populates practitioner', function(done) {
-		factory.build('Content').then(contentAttr => {
-			contentService.createContent(contentAttr)
-				.then(content => {
-					assert.equal(contentAttr.practitioner, content.practitioner);
-					done();
-				})
-				.catch(err => {
-					done(err);
-				});
-		}).catch(err => {
-			done(err);
-		});;
+		const practitioner = factory.create('Practitioner').then(practitioner => {
+		console.log(practitioner)}).then(practitioner => {
+			factory.build('Content').then(contentAttr => {
+				contentService.createContent(contentAttr, practitioner)
+					.then(content => {
+						console.log(contentAttr)
+						console.log(content)
+						assert.notEqual(content.practitioner, null)
+						done();
+					})
+					.catch(err => {
+						done(err);
+					});
+			}).catch(err => {
+				done(err);
+			})
+		});
 	});
 
 
